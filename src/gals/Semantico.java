@@ -15,14 +15,18 @@ public class Semantico implements Constants {
   String currentVariable = null;
 
   public void executeAction(int action, Token token) throws SemanticError {
+    System.out.println(action);
     switch (action) {
+      // print command
       case 1:
         String value = Integer.toBinaryString(this.variables.get(this.currentVariable)) + "\n";
         System.out.println(this.currentVariable + " = " + value);
         break;
+      // current variable in use
       case 2:
         this.currentVariable = token.getLexeme();
         break;
+      // comma (end line)
       case 3:
         if (!this.stackOperands.isEmpty()) {
           throw new SemanticError("Incomplete expression: Check if parentheses weren't closed.", token.getPosition());
@@ -32,21 +36,26 @@ public class Semantico implements Constants {
         this.listOperands.clear();
         this.listOperators.clear();
         break;
+      // operators (+, -, *, /, log())
       case 4:
-        System.out.println("Ação 4: " + token.getLexeme());
+        this.addOperator(token.getLexeme());
         break;
+      // numbers (0 and 1)
       case 5:
-        System.out.println("Ação 5: " + token.getLexeme());
+        this.addOperand(Integer.parseInt(token.getLexeme(), 2));
         break;
+      // variables (x, y, etc...)
       case 6:
-        System.out.println("Ação 6: " + token.getLexeme());
+        this.addOperand(this.variables.get(token.getLexeme()));
         break;
+      // open parentheses
       case 7:
         this.stackOperands.push(this.listOperands);
         this.stackOperators.push(this.listOperators);
         this.listOperands = new ArrayList<Integer>();
         this.listOperators = new ArrayList<String>();
         break;
+      // close parentheses
       case 8:
         Integer parenthesesResult = this.listOperands.get(0);
 
@@ -61,5 +70,13 @@ public class Semantico implements Constants {
       default:
         throw new SemanticError("Action doesn't provided");
     }
+  }
+
+  private void addOperator(String operator) {
+    this.listOperators.add(operator);
+  }
+
+  private void addOperand(Integer operand) {
+    this.listOperands.add(operand);
   }
 }
