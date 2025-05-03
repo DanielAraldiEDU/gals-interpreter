@@ -31,6 +31,7 @@ public class Semantico implements Constants {
           throw new SemanticError("Incomplete expression: Check if parentheses weren't closed.", token.getPosition());
         }
 
+        this.applyOperatorsInOrder(this.listOperands, this.listOperators);
         this.variables.put(this.currentVariable, this.listOperands.get(0));
         this.listOperands.clear();
         this.listOperators.clear();
@@ -56,6 +57,8 @@ public class Semantico implements Constants {
         break;
       // close parentheses
       case 8:
+        this.applyOperatorsInOrder(this.listOperands, this.listOperators);
+
         Integer parenthesesResult = this.listOperands.get(0);
 
         List<Integer> previousOperandsList = this.stackOperands.pop();
@@ -80,10 +83,10 @@ public class Semantico implements Constants {
     operators.add("+");
     operators.add("-");
 
-    executeOperation(operators.subList(0, 1), listOperands, listOperators);
-    executeOperation(operators.subList(1, 2), listOperands, listOperators);
-    executeOperation(operators.subList(2, 4), listOperands, listOperators);
-    executeOperation(operators.subList(4, 6), listOperands, listOperators);
+    this.executeOperation(operators.subList(0, 1), listOperands, listOperators);
+    this.executeOperation(operators.subList(1, 2), listOperands, listOperators);
+    this.executeOperation(operators.subList(2, 4), listOperands, listOperators);
+    this.executeOperation(operators.subList(4, 6), listOperands, listOperators);
   }
 
   private void executeOperation(List<String> targetOperators, List<Integer> listOperands, List<String> listOperators) {
@@ -91,12 +94,12 @@ public class Semantico implements Constants {
       String operator = listOperators.get(i);
 
       if (targetOperators.contains(operator)) {
+        Integer result = null;
         Integer firstNumber = listOperands.get(i);
-        Integer secondNumber = operator.equals("log")
+        Integer secondNumber = !operator.equals("log")
             ? listOperands.get(i + 1)
             : null;
 
-        Integer result = null;
         switch (operator) {
           case "**":
             result = (int) Math.pow(firstNumber, secondNumber);
