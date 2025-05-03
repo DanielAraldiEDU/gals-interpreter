@@ -15,7 +15,6 @@ public class Semantico implements Constants {
   String currentVariable = null;
 
   public void executeAction(int action, Token token) throws SemanticError {
-    System.out.println(action);
     switch (action) {
       // print command
       case 1:
@@ -36,7 +35,7 @@ public class Semantico implements Constants {
         this.listOperands.clear();
         this.listOperators.clear();
         break;
-      // operators (+, -, *, /, log())
+      // operators (+, -, *, /, **, log())
       case 4:
         this.addOperator(token.getLexeme());
         break;
@@ -69,6 +68,72 @@ public class Semantico implements Constants {
         break;
       default:
         throw new SemanticError("Action doesn't provided");
+    }
+  }
+
+  private void applyOperatorsInOrder(List<Integer> listOperands, List<String> listOperators) {
+    List<String> operators = new ArrayList<String>();
+    operators.add("log");
+    operators.add("**");
+    operators.add("*");
+    operators.add("/");
+    operators.add("+");
+    operators.add("-");
+
+    executeOperation(operators.subList(0, 1), listOperands, listOperators);
+    executeOperation(operators.subList(1, 2), listOperands, listOperators);
+    executeOperation(operators.subList(2, 4), listOperands, listOperators);
+    executeOperation(operators.subList(4, 6), listOperands, listOperators);
+  }
+
+  private void executeOperation(List<String> targetOperators, List<Integer> listOperands, List<String> listOperators) {
+    for (int i = 0; i < listOperators.size(); i++) {
+      String operator = listOperators.get(i);
+
+      if (targetOperators.contains(operator)) {
+        Integer firstNumber = listOperands.get(i);
+        Integer secondNumber = operator.equals("log")
+            ? listOperands.get(i + 1)
+            : null;
+
+        Integer result = null;
+        switch (operator) {
+          case "**":
+            result = (int) Math.pow(firstNumber, secondNumber);
+            break;
+          case "*":
+            result = firstNumber * secondNumber;
+            break;
+          case "/":
+            if (secondNumber == 0) {
+              throw new ArithmeticException("Division by zero.");
+            }
+            result = firstNumber / secondNumber;
+            break;
+          case "+":
+            result = firstNumber + secondNumber;
+            break;
+          case "-":
+            result = firstNumber - secondNumber;
+            break;
+          case "log":
+            if (firstNumber <= 0) {
+              throw new ArithmeticException("Logarithm of non-positive number.");
+            }
+
+            result = (int) Math.log10(firstNumber);
+
+            listOperands.set(i, result);
+            listOperators.remove(i);
+            i--;
+            continue;
+        }
+
+        listOperands.set(i, result);
+        listOperands.remove(i + 1);
+        listOperators.remove(i);
+        i--;
+      }
     }
   }
 
