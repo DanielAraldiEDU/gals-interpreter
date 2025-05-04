@@ -19,7 +19,7 @@ public class Semantico implements Constants {
       // print command
       case 1:
         String currentPrintVariable = token.getLexeme();
-        String value = Integer.toBinaryString(this.variables.get(currentPrintVariable)) + "\n";
+        String value = Integer.toBinaryString(this.variables.get(currentPrintVariable));
         System.out.println(currentPrintVariable + " = " + value);
         break;
       // current variable in use
