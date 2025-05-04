@@ -18,9 +18,7 @@ public class Semantico implements Constants {
     switch (action) {
       // print command
       case 1:
-        String currentPrintVariable = token.getLexeme();
-        String value = Integer.toBinaryString(this.variables.get(currentPrintVariable));
-        System.out.println(currentPrintVariable + " = " + value);
+        this.print(token.getLexeme());
         break;
       // current variable in use
       case 2:
@@ -32,10 +30,7 @@ public class Semantico implements Constants {
           throw new SemanticError("Incomplete expression: Check if parentheses weren't closed.", token.getPosition());
         }
 
-        this.applyOperatorsInOrder(this.listOperands, this.listOperators);
-        this.variables.put(this.currentVariable, this.listOperands.get(0));
-        this.listOperands.clear();
-        this.listOperators.clear();
+        this.finalizeExpressionProcessing();
         break;
       // operators (+, -, *, /, **, log())
       case 4:
@@ -53,28 +48,50 @@ public class Semantico implements Constants {
         break;
       // open parentheses
       case 7:
-        this.stackOperands.push(this.listOperands);
-        this.stackOperators.push(this.listOperators);
-        this.listOperands = new ArrayList<Integer>();
-        this.listOperators = new ArrayList<String>();
+        this.initializeExpressionProcessing();
         break;
       // close parentheses
       case 8:
-        this.applyOperatorsInOrder(this.listOperands, this.listOperators);
-
-        Integer parenthesesResult = this.listOperands.get(0);
-
-        List<Integer> previousOperandsList = this.stackOperands.pop();
-        List<String> previousOperatorsList = this.stackOperators.pop();
-
-        previousOperandsList.add(parenthesesResult);
-
-        this.listOperands = previousOperandsList;
-        this.listOperators = previousOperatorsList;
+        this.processParenthesesResult();
         break;
       default:
         throw new SemanticError("Action doesn't provided");
     }
+  }
+
+  private void print(String value) {
+    String binaryValue = Integer.toBinaryString(this.variables.get(value));
+    System.out.println(value + " = " + binaryValue);
+  }
+
+  private void finalizeExpressionProcessing() throws SemanticError {
+    this.applyOperatorsInOrder(this.listOperands, this.listOperators);
+
+    this.variables.put(this.currentVariable, this.listOperands.get(0));
+
+    this.listOperands.clear();
+    this.listOperators.clear();
+  }
+
+  private void initializeExpressionProcessing() {
+    this.stackOperands.push(this.listOperands);
+    this.stackOperators.push(this.listOperators);
+    this.listOperands = new ArrayList<Integer>();
+    this.listOperators = new ArrayList<String>();
+  }
+
+  private void processParenthesesResult() {
+    this.applyOperatorsInOrder(this.listOperands, this.listOperators);
+
+    Integer parenthesesResult = this.listOperands.get(0);
+
+    List<Integer> previousOperandsList = this.stackOperands.pop();
+    List<String> previousOperatorsList = this.stackOperators.pop();
+
+    previousOperandsList.add(parenthesesResult);
+
+    this.listOperands = previousOperandsList;
+    this.listOperators = previousOperatorsList;
   }
 
   private void applyOperatorsInOrder(List<Integer> listOperands, List<String> listOperators) {
