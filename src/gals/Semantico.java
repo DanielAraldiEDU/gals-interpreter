@@ -122,8 +122,7 @@ public class Semantico implements Constants {
     this.executeOperation(tinyPrecedence);
   }
 
-  private void executeOperation(List<String> targetOperators)
-      throws SemanticError {
+  private void executeOperation(List<String> targetOperators) throws SemanticError {
     for (int i = 0; i < this.listOperators.size(); i++) {
       final String operator = this.listOperators.get(i);
 
