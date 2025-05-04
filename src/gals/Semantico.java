@@ -82,6 +82,7 @@ public class Semantico implements Constants {
   private void initializeExpressionProcessing() {
     this.stackOperands.push(this.listOperands);
     this.stackOperators.push(this.listOperators);
+
     this.listOperands = new ArrayList<Integer>();
     this.listOperators = new ArrayList<String>();
   }
@@ -102,6 +103,7 @@ public class Semantico implements Constants {
 
   private void applyOperatorsInOrder(List<Integer> listOperands, List<String> listOperators) {
     List<String> operators = new ArrayList<String>();
+
     operators.add("log");
     operators.add("**");
     operators.add("*");
@@ -109,10 +111,15 @@ public class Semantico implements Constants {
     operators.add("+");
     operators.add("-");
 
-    this.executeOperation(operators.subList(0, 1), listOperands, listOperators);
-    this.executeOperation(operators.subList(1, 2), listOperands, listOperators);
-    this.executeOperation(operators.subList(2, 4), listOperands, listOperators);
-    this.executeOperation(operators.subList(4, 6), listOperands, listOperators);
+    List<String> biggerPrecedence = operators.subList(0, 1);
+    List<String> intermediaryPrecedence = operators.subList(1, 2);
+    List<String> smallerPrecedence = operators.subList(2, 4);
+    List<String> tinyPrecedence = operators.subList(4, 6);
+
+    this.executeOperation(biggerPrecedence, listOperands, listOperators);
+    this.executeOperation(intermediaryPrecedence, listOperands, listOperators);
+    this.executeOperation(smallerPrecedence, listOperands, listOperators);
+    this.executeOperation(tinyPrecedence, listOperands, listOperators);
   }
 
   private void executeOperation(List<String> targetOperators, List<Integer> listOperands, List<String> listOperators) {
