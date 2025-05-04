@@ -68,7 +68,7 @@ public class Semantico implements Constants {
 
   private void finalizeExpressionProcessing(Token token) throws SemanticError {
     if (!this.stackOperands.isEmpty()) {
-      throw new SemanticError("Incomplete expression: Check if parentheses weren't closed.", token.getPosition());
+      throw new SemanticError("Incomplete expression.", token.getPosition());
     }
 
     this.applyOperatorsInOrder(this.listOperands, this.listOperators);
@@ -87,7 +87,7 @@ public class Semantico implements Constants {
     this.listOperators = new ArrayList<String>();
   }
 
-  private void processParenthesesResult() {
+  private void processParenthesesResult() throws SemanticError {
     this.applyOperatorsInOrder(this.listOperands, this.listOperators);
 
     final Integer parenthesesResult = this.listOperands.get(0);
@@ -101,7 +101,7 @@ public class Semantico implements Constants {
     this.listOperators = previousOperatorsList;
   }
 
-  private void applyOperatorsInOrder(List<Integer> listOperands, List<String> listOperators) {
+  private void applyOperatorsInOrder(List<Integer> listOperands, List<String> listOperators) throws SemanticError {
     final List<String> operators = new ArrayList<String>();
 
     operators.add("log");
@@ -122,7 +122,8 @@ public class Semantico implements Constants {
     this.executeOperation(tinyPrecedence, listOperands, listOperators);
   }
 
-  private void executeOperation(List<String> targetOperators, List<Integer> listOperands, List<String> listOperators) {
+  private void executeOperation(List<String> targetOperators, List<Integer> listOperands, List<String> listOperators)
+      throws SemanticError {
     for (int i = 0; i < listOperators.size(); i++) {
       final String operator = listOperators.get(i);
 
@@ -163,6 +164,8 @@ public class Semantico implements Constants {
             listOperators.remove(i);
             i--;
             continue;
+          default:
+            throw new SemanticError("Operator not supported: " + operator);
         }
 
         listOperands.set(i, result);
