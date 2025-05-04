@@ -28,7 +28,7 @@ public class Semantico implements Constants {
       case 3:
         this.finalizeExpressionProcessing(token);
         break;
-      // operators (+, -, *, /, **, log())
+      // operators (+, -, *, /, ^, log)
       case 4:
         this.listOperators.add(token.getLexeme());
         break;
@@ -105,7 +105,7 @@ public class Semantico implements Constants {
     final List<String> operators = new ArrayList<String>();
 
     operators.add("log");
-    operators.add("**");
+    operators.add("^");
     operators.add("*");
     operators.add("/");
     operators.add("+");
@@ -149,7 +149,7 @@ public class Semantico implements Constants {
             }
             result = firstNumber / secondNumber;
             break;
-          case "**":
+          case "^":
             result = (int) Math.pow(firstNumber, secondNumber);
             break;
           case "log":
