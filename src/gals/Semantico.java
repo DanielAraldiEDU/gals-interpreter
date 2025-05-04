@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Stack;
 
 public class Semantico implements Constants {
+  Map<Integer, String> variablesInUse = new HashMap<Integer, String>();
   Map<String, Integer> variables = new HashMap<String, Integer>();
   Stack<List<String>> stackOperators = new Stack<List<String>>();
   Stack<List<Integer>> stackOperands = new Stack<List<Integer>>();
@@ -18,6 +19,7 @@ public class Semantico implements Constants {
     switch (action) {
       // print command
       case 1:
+        // TODO: fix current variable print when multiple variables are printed.
         String value = Integer.toBinaryString(this.variables.get(this.currentVariable)) + "\n";
         System.out.println(this.currentVariable + " = " + value);
         break;
