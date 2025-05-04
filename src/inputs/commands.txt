@@ -1,3 +1,6 @@
 x = 10 + 11;
-y = 11 + 10;
-z = x - y;
+print(x);
+y = 10 - 1;
+z = x / y;
+print(y);
+print(z);

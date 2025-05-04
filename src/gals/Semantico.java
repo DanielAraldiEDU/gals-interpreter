@@ -18,9 +18,9 @@ public class Semantico implements Constants {
     switch (action) {
       // print command
       case 1:
-        // TODO: fix current variable print when multiple variables are printed.
-        String value = Integer.toBinaryString(this.variables.get(this.currentVariable)) + "\n";
-        System.out.println(this.currentVariable + " = " + value);
+        String currentPrintVariable = token.getLexeme();
+        String value = Integer.toBinaryString(this.variables.get(currentPrintVariable)) + "\n";
+        System.out.println(currentPrintVariable + " = " + value);
         break;
       // current variable in use
       case 2:
