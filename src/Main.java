@@ -9,7 +9,7 @@ import gals.Sintatico;
 public class Main {
   public static void main(String[] args) {
     try {
-      final String filePath = "./src/inputs/commands.txt";
+      final String filePath = "./src/inputs/code.txt";
       Reader fileRender = new FileReader(filePath);
 
       Lexico lexico = new Lexico(fileRender);
