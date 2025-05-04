@@ -123,14 +123,14 @@ public class Semantico implements Constants {
   }
 
   private void executeOperation(List<String> targetOperators) throws SemanticError {
-    for (int i = 0; i < this.listOperators.size(); i++) {
-      final String operator = this.listOperators.get(i);
+    for (int index = 0; index < this.listOperators.size(); index++) {
+      final String operator = this.listOperators.get(index);
 
       if (targetOperators.contains(operator)) {
         Integer result = null;
-        final Integer firstNumber = this.listOperands.get(i);
+        final Integer firstNumber = this.listOperands.get(index);
         final Integer secondNumber = !operator.equals("log")
-            ? this.listOperands.get(i + 1)
+            ? this.listOperands.get(index + 1)
             : null;
 
         switch (operator) {
@@ -159,18 +159,18 @@ public class Semantico implements Constants {
 
             result = (int) Math.log10(firstNumber);
 
-            this.listOperands.set(i, result);
-            this.listOperators.remove(i);
-            i--;
+            this.listOperands.set(index, result);
+            this.listOperators.remove(index);
+            index--;
             continue;
           default:
             throw new SemanticError("Operator not supported: " + operator);
         }
 
-        this.listOperands.set(i, result);
-        this.listOperands.remove(i + 1);
-        this.listOperators.remove(i);
-        i--;
+        this.listOperands.set(index, result);
+        this.listOperands.remove(index + 1);
+        this.listOperators.remove(index);
+        index--;
       }
     }
   }
