@@ -39,15 +39,17 @@ public class Semantico implements Constants {
         break;
       // operators (+, -, *, /, **, log())
       case 4:
-        this.addOperator(token.getLexeme());
+        this.listOperators.add(token.getLexeme());
         break;
       // numbers (0 and 1)
       case 5:
-        this.addOperand(Integer.parseInt(token.getLexeme(), 2));
+        Integer operandNumber = Integer.parseInt(token.getLexeme(), 2);
+        this.listOperands.add(operandNumber);
         break;
       // variables (x, y, etc...)
       case 6:
-        this.addOperand(this.variables.get(token.getLexeme()));
+        Integer operandVariable = this.variables.get(token.getLexeme());
+        this.listOperands.add(operandVariable);
         break;
       // open parentheses
       case 7:
@@ -139,13 +141,5 @@ public class Semantico implements Constants {
         i--;
       }
     }
-  }
-
-  private void addOperator(String operator) {
-    this.listOperators.add(operator);
-  }
-
-  private void addOperand(Integer operand) {
-    this.listOperands.add(operand);
   }
 }
