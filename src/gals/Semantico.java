@@ -18,7 +18,7 @@ public class Semantico implements Constants {
     switch (action) {
       // print command
       case 1:
-        this.print(token.getLexeme());
+        this.print(token);
         break;
       // current variable in use
       case 2:
@@ -26,11 +26,7 @@ public class Semantico implements Constants {
         break;
       // comma (end line)
       case 3:
-        if (!this.stackOperands.isEmpty()) {
-          throw new SemanticError("Incomplete expression: Check if parentheses weren't closed.", token.getPosition());
-        }
-
-        this.finalizeExpressionProcessing();
+        this.finalizeExpressionProcessing(token);
         break;
       // operators (+, -, *, /, **, log())
       case 4:
@@ -59,12 +55,22 @@ public class Semantico implements Constants {
     }
   }
 
-  private void print(String value) {
-    String binaryValue = Integer.toBinaryString(this.variables.get(value));
+  private void print(Token token) throws SemanticError {
+    String value = token.getLexeme();
+    Integer variable = this.variables.get(value);
+    if (variable == null) {
+      throw new SemanticError("\"" + value + "\" is not defined.", token.getPosition());
+    }
+
+    String binaryValue = Integer.toBinaryString(variable);
     System.out.println(value + " = " + binaryValue);
   }
 
-  private void finalizeExpressionProcessing() throws SemanticError {
+  private void finalizeExpressionProcessing(Token token) throws SemanticError {
+    if (!this.stackOperands.isEmpty()) {
+      throw new SemanticError("Incomplete expression: Check if parentheses weren't closed.", token.getPosition());
+    }
+
     this.applyOperatorsInOrder(this.listOperands, this.listOperators);
 
     this.variables.put(this.currentVariable, this.listOperands.get(0));
