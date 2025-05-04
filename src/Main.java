@@ -9,14 +9,14 @@ import gals.Sintatico;
 public class Main {
   public static void main(String[] args) {
     try {
-      Reader fileRender = new FileReader("./src/inputs/commands.txt");
+      final String filePath = "./src/inputs/commands.txt";
+      Reader fileRender = new FileReader(filePath);
 
       Lexico lexico = new Lexico(fileRender);
       Semantico semantico = new Semantico();
       Sintatico sintatico = new Sintatico();
 
       sintatico.parse(lexico, semantico);
-
     } catch (FileNotFoundException error) {
       System.out.println("File not found: " + error.getMessage());
     } catch (Exception error) {

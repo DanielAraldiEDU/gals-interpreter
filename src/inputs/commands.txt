@@ -1,6 +1,6 @@
 x = 10 + 11;
 print(x);
 y = 10 - 1;
-z = x / y;
+z = x / y + 1;
 print(y);
 print(z);

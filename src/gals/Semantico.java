@@ -102,8 +102,11 @@ public class Semantico implements Constants {
             : null;
 
         switch (operator) {
-          case "**":
-            result = (int) Math.pow(firstNumber, secondNumber);
+          case "+":
+            result = firstNumber + secondNumber;
+            break;
+          case "-":
+            result = firstNumber - secondNumber;
             break;
           case "*":
             result = firstNumber * secondNumber;
@@ -114,11 +117,8 @@ public class Semantico implements Constants {
             }
             result = firstNumber / secondNumber;
             break;
-          case "+":
-            result = firstNumber + secondNumber;
-            break;
-          case "-":
-            result = firstNumber - secondNumber;
+          case "**":
+            result = (int) Math.pow(firstNumber, secondNumber);
             break;
           case "log":
             if (firstNumber <= 0) {
