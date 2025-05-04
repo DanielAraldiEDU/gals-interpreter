@@ -34,12 +34,12 @@ public class Semantico implements Constants {
         break;
       // numbers (0 and 1)
       case 5:
-        Integer operandNumber = Integer.parseInt(token.getLexeme(), 2);
+        final Integer operandNumber = Integer.parseInt(token.getLexeme(), 2);
         this.listOperands.add(operandNumber);
         break;
       // variables (x, y, etc...)
       case 6:
-        Integer operandVariable = this.variables.get(token.getLexeme());
+        final Integer operandVariable = this.variables.get(token.getLexeme());
         this.listOperands.add(operandVariable);
         break;
       // open parentheses
@@ -56,13 +56,13 @@ public class Semantico implements Constants {
   }
 
   private void print(Token token) throws SemanticError {
-    String value = token.getLexeme();
-    Integer variable = this.variables.get(value);
+    final String value = token.getLexeme();
+    final Integer variable = this.variables.get(value);
     if (variable == null) {
       throw new SemanticError("\"" + value + "\" is not defined.", token.getPosition());
     }
 
-    String binaryValue = Integer.toBinaryString(variable);
+    final String binaryValue = Integer.toBinaryString(variable);
     System.out.println(value + " = " + binaryValue);
   }
 
@@ -90,10 +90,10 @@ public class Semantico implements Constants {
   private void processParenthesesResult() {
     this.applyOperatorsInOrder(this.listOperands, this.listOperators);
 
-    Integer parenthesesResult = this.listOperands.get(0);
+    final Integer parenthesesResult = this.listOperands.get(0);
 
-    List<Integer> previousOperandsList = this.stackOperands.pop();
-    List<String> previousOperatorsList = this.stackOperators.pop();
+    final List<Integer> previousOperandsList = this.stackOperands.pop();
+    final List<String> previousOperatorsList = this.stackOperators.pop();
 
     previousOperandsList.add(parenthesesResult);
 
@@ -102,7 +102,7 @@ public class Semantico implements Constants {
   }
 
   private void applyOperatorsInOrder(List<Integer> listOperands, List<String> listOperators) {
-    List<String> operators = new ArrayList<String>();
+    final List<String> operators = new ArrayList<String>();
 
     operators.add("log");
     operators.add("**");
@@ -111,10 +111,10 @@ public class Semantico implements Constants {
     operators.add("+");
     operators.add("-");
 
-    List<String> biggerPrecedence = operators.subList(0, 1);
-    List<String> intermediaryPrecedence = operators.subList(1, 2);
-    List<String> smallerPrecedence = operators.subList(2, 4);
-    List<String> tinyPrecedence = operators.subList(4, 6);
+    final List<String> biggerPrecedence = operators.subList(0, 1);
+    final List<String> intermediaryPrecedence = operators.subList(1, 2);
+    final List<String> smallerPrecedence = operators.subList(2, 4);
+    final List<String> tinyPrecedence = operators.subList(4, 6);
 
     this.executeOperation(biggerPrecedence, listOperands, listOperators);
     this.executeOperation(intermediaryPrecedence, listOperands, listOperators);
@@ -124,12 +124,12 @@ public class Semantico implements Constants {
 
   private void executeOperation(List<String> targetOperators, List<Integer> listOperands, List<String> listOperators) {
     for (int i = 0; i < listOperators.size(); i++) {
-      String operator = listOperators.get(i);
+      final String operator = listOperators.get(i);
 
       if (targetOperators.contains(operator)) {
         Integer result = null;
-        Integer firstNumber = listOperands.get(i);
-        Integer secondNumber = !operator.equals("log")
+        final Integer firstNumber = listOperands.get(i);
+        final Integer secondNumber = !operator.equals("log")
             ? listOperands.get(i + 1)
             : null;
 
