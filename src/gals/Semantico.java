@@ -71,7 +71,7 @@ public class Semantico implements Constants {
       throw new SemanticError("Incomplete expression.", token.getPosition());
     }
 
-    this.applyOperatorsInOrder(this.listOperands, this.listOperators);
+    this.applyOperatorsInOrder();
 
     this.variables.put(this.currentVariable, this.listOperands.get(0));
 
@@ -88,7 +88,7 @@ public class Semantico implements Constants {
   }
 
   private void processParenthesesResult() throws SemanticError {
-    this.applyOperatorsInOrder(this.listOperands, this.listOperators);
+    this.applyOperatorsInOrder();
 
     final Integer parenthesesResult = this.listOperands.get(0);
 
@@ -101,7 +101,7 @@ public class Semantico implements Constants {
     this.listOperators = previousOperatorsList;
   }
 
-  private void applyOperatorsInOrder(List<Integer> listOperands, List<String> listOperators) throws SemanticError {
+  private void applyOperatorsInOrder() throws SemanticError {
     final List<String> operators = new ArrayList<String>();
 
     operators.add("log");
@@ -116,22 +116,22 @@ public class Semantico implements Constants {
     final List<String> smallerPrecedence = operators.subList(2, 4);
     final List<String> tinyPrecedence = operators.subList(4, 6);
 
-    this.executeOperation(biggerPrecedence, listOperands, listOperators);
-    this.executeOperation(intermediaryPrecedence, listOperands, listOperators);
-    this.executeOperation(smallerPrecedence, listOperands, listOperators);
-    this.executeOperation(tinyPrecedence, listOperands, listOperators);
+    this.executeOperation(biggerPrecedence);
+    this.executeOperation(intermediaryPrecedence);
+    this.executeOperation(smallerPrecedence);
+    this.executeOperation(tinyPrecedence);
   }
 
-  private void executeOperation(List<String> targetOperators, List<Integer> listOperands, List<String> listOperators)
+  private void executeOperation(List<String> targetOperators)
       throws SemanticError {
-    for (int i = 0; i < listOperators.size(); i++) {
-      final String operator = listOperators.get(i);
+    for (int i = 0; i < this.listOperators.size(); i++) {
+      final String operator = this.listOperators.get(i);
 
       if (targetOperators.contains(operator)) {
         Integer result = null;
-        final Integer firstNumber = listOperands.get(i);
+        final Integer firstNumber = this.listOperands.get(i);
         final Integer secondNumber = !operator.equals("log")
-            ? listOperands.get(i + 1)
+            ? this.listOperands.get(i + 1)
             : null;
 
         switch (operator) {
@@ -160,17 +160,17 @@ public class Semantico implements Constants {
 
             result = (int) Math.log10(firstNumber);
 
-            listOperands.set(i, result);
-            listOperators.remove(i);
+            this.listOperands.set(i, result);
+            this.listOperators.remove(i);
             i--;
             continue;
           default:
             throw new SemanticError("Operator not supported: " + operator);
         }
 
-        listOperands.set(i, result);
-        listOperands.remove(i + 1);
-        listOperators.remove(i);
+        this.listOperands.set(i, result);
+        this.listOperands.remove(i + 1);
+        this.listOperators.remove(i);
         i--;
       }
     }
