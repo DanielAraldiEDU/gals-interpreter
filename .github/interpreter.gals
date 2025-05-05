@@ -1,0 +1,53 @@
+#Options
+GenerateScanner = true
+GenerateParser = true
+Language = Java
+ScannerName = Lexico
+ParserName = Sintatico
+SemanticName = Semantico
+Package = gals
+ScannerCaseSensitive = true
+ScannerTable = Compact
+Input = Stream
+Parser = SLR
+#RegularDefinitions
+
+#Tokens
+ :[\ \n\t\r\s]+
+numbers: [0-1]+
+sum: \+
+subtraction: \-
+multiplication: \*
+division: /
+exponentiation: \^
+log: log
+equal: =
+comma: ";"
+open: "("
+close: ")"
+print: print
+variables: [a-zA-Z]+
+#NonTerminals
+<commands>
+<command>
+<calculations>
+<calculation>
+<value>
+<logarithm>
+#Grammar
+<commands> ::= <command> <commands>
+	| <command>;
+<command> ::= print open variables #1 close comma 
+	| variables #2 equal <calculations> comma #3;
+<calculations> ::= <calculations> <calculation>
+	| <value>;
+<calculation> ::= sum  #4 <value> 
+	| subtraction #4 <value> 
+	| multiplication #4 <value> 
+	| division #4 <value>
+	| exponentiation #4 <value>;
+<logarithm> ::= log #4 open #7 <calculations> close #8;
+<value> ::= numbers #5 
+	| variables #6 
+	| open #7 <calculations> close #8 
+	| <logarithm>;
