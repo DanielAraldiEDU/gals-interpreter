@@ -1,5 +1,7 @@
 # GALS Interpreter
 
+[![wakatime](https://wakatime.com/badge/user/920a7e43-2969-4212-82ff-1b375685ff58/project/7b56d9df-5ea7-4b10-92b1-d6e8ecdaa83b.svg)](https://wakatime.com/badge/user/920a7e43-2969-4212-82ff-1b375685ff58/project/7b56d9df-5ea7-4b10-92b1-d6e8ecdaa83b)
+
 Este projeto tem como intuito realizar os cálculos matemáticos das seguintes operações:
 
 1. Soma (`+`)
