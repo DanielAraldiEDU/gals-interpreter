@@ -56,14 +56,14 @@ public class Semantico implements Constants {
   }
 
   private void print(Token token) throws SemanticError {
-    final String value = token.getLexeme();
-    final Integer variable = this.variables.get(value);
-    if (variable == null) {
-      throw new SemanticError("\"" + value + "\" is not defined.", token.getPosition());
+    final String variableName = token.getLexeme();
+    final Integer variableValue = this.variables.get(variableName);
+    if (variableValue == null) {
+      throw new SemanticError("\"" + variableName + "\" is not defined.", token.getPosition());
     }
 
-    final String binaryValue = Integer.toBinaryString(variable);
-    System.out.println(value + " = " + binaryValue);
+    final String binaryValue = Integer.toBinaryString(variableValue);
+    System.out.println(variableName + " = " + binaryValue);
   }
 
   private void finalizeExpressionProcessing(Token token) throws SemanticError {
