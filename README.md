@@ -8,7 +8,7 @@ Este projeto tem como intuito realizar os cálculos matemáticos das seguintes o
 2. Subtração (`-`)
 3. Multiplicação (`*`)
 4. Divisão (`/`)
-5. Exponenciação (`**`)
+5. Exponenciação (`^`)
 6. Logaritmo (`log`)
 
 **Observação**: Todos os cálculos são realizados na **base 2**, ou seja, apenas números binários.
