@@ -5,26 +5,15 @@ public class Lexico implements Constants {
   private String input;
 
   public Lexico() {
-    this(new java.io.StringReader(""));
+    this("");
   }
 
-  public Lexico(java.io.Reader input) {
+  public Lexico(String input) {
     setInput(input);
   }
 
-  public void setInput(java.io.Reader input) {
-    StringBuffer bfr = new StringBuffer();
-    try {
-      int c = input.read();
-      while (c != -1) {
-        bfr.append((char) c);
-        c = input.read();
-      }
-      this.input = bfr.toString();
-    } catch (java.io.IOException e) {
-      e.printStackTrace();
-    }
-
+  public void setInput(String input) {
+    this.input = input;
     setPosition(0);
   }
 
